@@ -24,6 +24,7 @@ import Network.Wai.Handler.Warp
 import Network.HTTP.Types (status200, status404)
 
 import qualified Language.Haskell.Interpreter as I
+import qualified Language.Haskell.Interpreter.Unsafe as I
 import qualified Control.Exception as E
 
 
@@ -77,6 +78,7 @@ handleConnection pathToWatch mgr pending = do
 
 interp :: FilePath -> I.InterpreterT IO String
 interp fp = do
+  I.unsafeSetGhcOption "-package hylide"
   I.loadModules [fp]
   I.setImports [takeBaseName fp]
   I.eval "output"
