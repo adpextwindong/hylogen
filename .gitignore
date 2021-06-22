@@ -5,3 +5,8 @@ src/*.hs
 shader.glsl
 core
 **/*.cabal
+
+*.swp
+*/dist-newstyle/
+stack.yaml.lock
+*/x86_64-windows-ghc-8.8.4/
