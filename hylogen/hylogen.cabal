@@ -34,6 +34,7 @@ library
       Hylogen.Types.Booly
       Hylogen.Types.Texture
       Hylogen.Types.Vec
+      Hylogen.Types.Mat
   other-modules:
       Paths_hylogen
   default-language: Haskell2010

@@ -27,6 +27,9 @@ data GLSLType = GLSLFloat
               | GLSLVec2
               | GLSLVec3
               | GLSLVec4
+              | GLSLMat2    --TODO
+              | GLSLMat3    --TODO
+              | GLSLMat4    --TODO
               | GLSLBool
               | GLSLTexture
               deriving (Eq, Ord)
@@ -37,6 +40,9 @@ instance Show GLSLType where
     GLSLVec2 -> "vec2"
     GLSLVec3 -> "vec3"
     GLSLVec4 -> "vec4"
+    GLSLMat2 -> "mat2"
+    GLSLMat3 -> "mat3"
+    GLSLMat4 -> "mat4"
     GLSLBool -> "bool"
     GLSLTexture -> "sampler2D"
 
