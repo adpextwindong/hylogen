@@ -55,6 +55,8 @@ data ExprForm = Uniform
               | Op2Pre
               | Op3Pre
               | Op4Pre
+              | Op9Pre
+              | Op16Pre
               | Select
               | Access
                 deriving (Show)
@@ -79,6 +81,20 @@ instance Show ExprMono where
     Op2Pre   -> mconcat [str, "(", show (xs!!0), ", ", show (xs!!1), ")"]
     Op3Pre   -> mconcat [str, "(", show (xs!!0), ", ", show (xs!!1), ", ", show (xs!!2), ")"]
     Op4Pre   -> mconcat [str, "(", show (xs!!0), ", ", show (xs!!1), ", ", show (xs!!2), ", ", show (xs!!3), ")"]
+
+    --FOR MATRIX
+    Op9Pre   -> mconcat [str, "(", show (xs!!0), ", ", show (xs!!1), ", ", show (xs!!2),
+                              ", ",show (xs!!3), ", ", show (xs!!4), ", ", show (xs!!5),
+                              ", ",show (xs!!6), ", ", show (xs!!7), ", ", show (xs!!8), ")"]
+
+    --FOR MATRIX
+    Op16Pre  -> mconcat [str, "(",
+                              ", ", show (xs!!0), ", ", show (xs!!1), ", ", show (xs!!2), ", ", show (xs !! 3),
+                              ", ", show (xs!!4), ", ", show (xs!!5), ", ", show (xs!!6), ", ", show (xs !! 7),
+                              ", ", show (xs!!8), ", ", show (xs!!9), ", ", show (xs!!10), ", ", show (xs !! 11),
+                              ", ", show (xs!!12), ", ", show (xs!!13), ", ", show (xs!!14), ", ", show (xs !! 15), ")"]
+
+
     Select   -> mconcat ["( ", show (xs!!0), " ? ", show (xs!!1), " : ", show (xs!!2), ")"]
     Access   -> mconcat [show (xs!!0), ".", str]
 
@@ -249,7 +265,35 @@ op4pre'' str a b c d = Expr t (Tree (Op4Pre, toGLSLType t, str) (fmap toMono [a,
   where t = tag :: e
 
 
+-- NOTE THIS IS FOR THE MATRIX STUFF
+-- | 9nary operator.
+-- Prefix function call style.
+-- Arguments have the same type.
+op9pre' :: forall a e
+          . (ToGLSLType a, ToGLSLType e)
+          => String -> Expr a -> Expr a -> Expr a
+                    -> Expr a -> Expr a -> Expr a
+                    -> Expr a -> Expr a -> Expr a
+                    -> Expr e
+op9pre' str a b c d e f g h i = Expr t (Tree (Op9Pre, toGLSLType t, str) (fmap toMono [a, b, c, d, e, f, g, h, i]))
+  where t = tag :: e
 
+-- NOTE THIS IS FOR THE MATRIX STUFF
+-- | 16nary operator.
+-- Prefix function call style.
+-- Arguments have the same type.
+op16pre' :: forall a e
+          . (ToGLSLType a, ToGLSLType e)
+          => String -> Expr a -> Expr a -> Expr a -> Expr a
+                    -> Expr a -> Expr a -> Expr a -> Expr a
+                    -> Expr a -> Expr a -> Expr a -> Expr a
+                    -> Expr a -> Expr a -> Expr a -> Expr a
+                    -> Expr e
+op16pre' str a b c d
+             e f g h
+             i j k l
+             m n o p = Expr t (Tree (Op9Pre, toGLSLType t, str) (fmap toMono [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p]))
+  where t = tag :: e
 
 -- | Open tree type, to be used for explicit recursion with data-reify for preserving sharing.
 --
@@ -283,6 +327,8 @@ instance (Show a) => Show (ExprMonoF a) where
     Op2Pre   -> mconcat [str, "(", strAt 0, ", ", strAt 1, ")"]
     Op3Pre   -> mconcat [str, "(", strAt 0, ", ", strAt 1, ", ", strAt 2, ")"]
     Op4Pre   -> mconcat [str, "(", strAt 0, ", ", strAt 1, ", ", strAt 2, ", ", strAt 3, ")"]
+    --TODO Op9Pre
+    --TODO Op16Pre
     Select   -> mconcat ["( ", strAt 0, " ? ", strAt 1, " : ", strAt 2, ")"]
     Access   -> mconcat [strAt 0, ".", str]
     where
