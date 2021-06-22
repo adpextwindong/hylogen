@@ -1,7 +1,7 @@
 module Hylogen.Types ( module Hylogen.Types.Vec
                      , module Hylogen.Types.Booly
                      , module Hylogen.Types.Texture
-                     --TODO export Mat once its in a decent state
+                     , module Hylogen.Types.Mat
                      ) where
 
 import Hylogen.Types.Vec hiding (mkSwizz)
