@@ -38,6 +38,11 @@ type family MulR a b where
 baz :: (OrMatVec a, OrMatVec b, MulR a b ~ Expr c, b ~ Expr b0, a ~ Expr a0, ToGLSLType a0, ToGLSLType b0, ToGLSLType c) => a -> b -> MulR a b
 baz = op2 "*"
 
+--"Illegal type synonym family application 'MulR a b' in instance"
+--hmmm
+--instance (OrMatVec a, OrMatVec b) => Num (MulR a b) where
+    --(*) = op2 "*"
+
 --Holy shit this works
 tbaz = baz ts22 tx
 tbaz2 = baz tx ts22
