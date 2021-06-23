@@ -11,13 +11,75 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE InstanceSigs #-}
 
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE PolyKinds #-}
+
 module Hylogen.Types.Mat where
 
 import GHC.TypeLits
 import Data.VectorSpace
+import Data.Proxy -- since Base 4.7.0.0 released in GHC 7.8.1 (Apr 2014)
 
 import Hylogen.Expr
 import Hylogen.Types.Vec
+
+--First attempt, use a typeclass where FloatMat/FloatVec or Mattable/Veccable inhabit it so we can typelevel or equality in a constraint to provide to a Num instance.
+
+--class (ToGLSLType (a n), KnownNat n) => MV a n where
+--    foo :: (Proxy a, Proxy n)
+
+class (ToGLSLType a) => MV a where
+    foo :: Proxy a
+
+--Undecidable instance idea, idk about it really
+--instance (ToGLSLType (FloatMat n m), KnownNat n, KnownNat m, t ~ FloatMat n m) => MV t where
+   -- foo :: forall a. Proxy a
+    --foo = Proxy
+
+data family MZ a
+data instance MZ (Expr (FloatVec n)) = VecMZ
+data instance MZ (Expr (FloatMat n m)) = MatMZ
+data instance MZ (FloatMat n m) = MatRawMZ
+--data instance MZ M22 = M22MZ
+
+type family IsFZ' a where
+    IsFZ' (Expr (FloatMat n m)) = 'True
+    IsFZ' (Expr (FloatVec n)) = 'True
+
+type IsFZ t = (IsFZ' t ~ 'True)
+
+data MVCompatibility
+    = MVCompat
+    | NotMVCompat
+
+qux :: (IsFZ a, IsFZ b) => a -> b -> Int
+qux _ _ = 1
+tqux = qux (ts22 :: M22) (tx :: Vec2)
+tqux2 = qux (tx :: Vec2) (ts22 :: M22)
+--Now we need some existential types or something..
+
+--Poly kinds?
+--type family FAnd (x :: FZ a) (y :: FZ b) :: Bool where
+    --FAnd _ _ = True
+
+--FZ is a non-injective type family??
+--qux :: FZ (Expr (FloatMat n m)) -> Bool
+--qux :: FZ a -> Bool
+--qux _ = False
+
+baz :: MZ a -> MZ b -> Proxy MZ
+baz = undefined
+--
+--instance (MV t) => Num (t) where
+--    (*) = undefined
+--instance (ToGLSLType (FloatVec n), KnownNat n, t ~ FloatVec n) => MV t where
+    --foo = Proxy
+
+--instance (ToGLSLType t, Veccable n) => MV t where
+    --foo = Proxy
+
+--instance MV (FloatMat (n :: Nat) (m :: Nat)) where
+    --foo = Proxy (FloatMat n m)
 
 -- | Floating matrix singleton type tag
 data FloatMat (n :: Nat) (m :: Nat) where
