@@ -31,12 +31,13 @@ type OrMatVec t = (OrMatVec' t ~ 'True)
 type family MulR a b where
     MulR (Expr (FloatVec 2)) (Expr (FloatMat 2 2)) = Expr (FloatVec 2)
     MulR (Expr (FloatMat 2 2)) (Expr (FloatVec 2)) = Expr (FloatVec 2)
+    -- TODO fill out this table reasonably enough
 
 --The type error for this when partially applied sucks ASS
 --The tilde stuff was because it wasn't able to deduce enough from just this
 --baz :: (OrMatVec a, OrMatVec b) => a -> b -> MulR a b
-baz :: (OrMatVec a, OrMatVec b, MulR a b ~ Expr c, b ~ Expr b0, a ~ Expr a0, ToGLSLType a0, ToGLSLType b0, ToGLSLType c) => a -> b -> MulR a b
-baz = op2 "*"
+mul :: (OrMatVec a, OrMatVec b, MulR a b ~ Expr c, b ~ Expr b0, a ~ Expr a0, ToGLSLType a0, ToGLSLType b0, ToGLSLType c) => a -> b -> MulR a b
+mul = op2 "*"
 
 --"Illegal type synonym family application 'MulR a b' in instance"
 --hmmm
@@ -44,14 +45,8 @@ baz = op2 "*"
     --(*) = op2 "*"
 
 --Holy shit this works
-tbaz = baz ts22 tx
-tbaz2 = baz tx ts22
-
-qux :: (OrMatVec a, OrMatVec b) => a -> b -> Int
-qux _ _ = 1
-tqux = qux (ts22 :: M22) (tx :: Vec2)
-tqux2 = qux (tx :: Vec2) (ts22 :: M22)
---Now we need some existential types or something..
+tbaz = mul ts22 tx
+tbaz2 = mul tx ts22
 
 -- | Floating matrix singleton type tag
 data FloatMat (n :: Nat) (m :: Nat) where
@@ -117,8 +112,8 @@ instance (Mattable n m) => Num (Mat n m) where
 --Darn looks like we need to figure this out some more
 --instance {-#OVERLAPPABLE#-} (a ~ Mattable n n, b ~ Veccable n) => Num (Vec n) where
 
-mul :: (ToGLSLType (FloatVec n), ToGLSLType (FloatMat n n)) => Mat n n -> Vec n  -> Vec n
-mul m v = op2 "*" m v
+--mul :: (ToGLSLType (FloatVec n), ToGLSLType (FloatMat n n)) => Mat n n -> Vec n  -> Vec n
+--mul m v = op2 "*" m v
 
 --instance (ToGLSLType (FloatVec n), ToGLSLType (FloatMat n n)) => Num (Mat n n) where
 --    (*) = op2 "*"
