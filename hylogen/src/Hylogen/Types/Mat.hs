@@ -18,7 +18,6 @@ module Hylogen.Types.Mat where
 
 import GHC.TypeLits
 import Data.VectorSpace
-import Data.Proxy -- since Base 4.7.0.0 released in GHC 7.8.1 (Apr 2014)
 
 import Hylogen.Expr
 import Hylogen.Types.Vec
@@ -29,10 +28,19 @@ type family IsFZ' a where
 
 type IsFZ t = (IsFZ' t ~ 'True)
 
---We probably dont need this
-data MVCompatibility
-    = MVCompat
-    | NotMVCompat
+type family MulR a b where
+    MulR (Expr (FloatVec 2)) (Expr (FloatMat 2 2)) = Expr (FloatVec 2)
+    MulR (Expr (FloatMat 2 2)) (Expr (FloatVec 2)) = Expr (FloatVec 2)
+
+--The type error for this when partially applied sucks ASS
+--The tilde stuff was because it wasn't able to deduce enough from just this
+--baz :: (IsFZ a, IsFZ b) => a -> b -> MulR a b
+baz :: (IsFZ a, IsFZ b, MulR a b ~ Expr c, b ~ Expr b0, a ~ Expr a0, ToGLSLType a0, ToGLSLType b0, ToGLSLType c) => a -> b -> MulR a b
+baz = op2 "*"
+
+--Holy shit this works
+tbaz = baz ts22 tx
+tbaz2 = baz tx ts22
 
 qux :: (IsFZ a, IsFZ b) => a -> b -> Int
 qux _ _ = 1
@@ -118,7 +126,12 @@ mat22 :: (M11, M11, M11, M11) -> M22
 mat22 (a, b, c, d) = op4pre' "mat2" a b c d
 
 --TEST FIXTURES
+ts22 :: M22
 ts22 = mat22 (1, 1, 1, 1)
+tv :: Vec2
 tv = vec2 (1.0, 1.0)
+tx :: Vec2
 tx = mul ts22 tv
+
+tprog :: Vec4
 tprog = vec4 (tx, tx)
