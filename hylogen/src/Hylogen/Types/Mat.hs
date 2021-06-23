@@ -22,11 +22,11 @@ import Data.VectorSpace
 import Hylogen.Expr
 import Hylogen.Types.Vec
 
-type family IsFZ' a where
-    IsFZ' (Expr (FloatMat n m)) = 'True
-    IsFZ' (Expr (FloatVec n)) = 'True
+type family OrMatVec' a where
+    OrMatVec' (Expr (FloatMat n m)) = 'True
+    OrMatVec' (Expr (FloatVec n)) = 'True
 
-type IsFZ t = (IsFZ' t ~ 'True)
+type OrMatVec t = (OrMatVec' t ~ 'True)
 
 type family MulR a b where
     MulR (Expr (FloatVec 2)) (Expr (FloatMat 2 2)) = Expr (FloatVec 2)
@@ -34,15 +34,15 @@ type family MulR a b where
 
 --The type error for this when partially applied sucks ASS
 --The tilde stuff was because it wasn't able to deduce enough from just this
---baz :: (IsFZ a, IsFZ b) => a -> b -> MulR a b
-baz :: (IsFZ a, IsFZ b, MulR a b ~ Expr c, b ~ Expr b0, a ~ Expr a0, ToGLSLType a0, ToGLSLType b0, ToGLSLType c) => a -> b -> MulR a b
+--baz :: (OrMatVec a, OrMatVec b) => a -> b -> MulR a b
+baz :: (OrMatVec a, OrMatVec b, MulR a b ~ Expr c, b ~ Expr b0, a ~ Expr a0, ToGLSLType a0, ToGLSLType b0, ToGLSLType c) => a -> b -> MulR a b
 baz = op2 "*"
 
 --Holy shit this works
 tbaz = baz ts22 tx
 tbaz2 = baz tx ts22
 
-qux :: (IsFZ a, IsFZ b) => a -> b -> Int
+qux :: (OrMatVec a, OrMatVec b) => a -> b -> Int
 qux _ _ = 1
 tqux = qux (ts22 :: M22) (tx :: Vec2)
 tqux2 = qux (tx :: Vec2) (ts22 :: M22)
