@@ -113,9 +113,10 @@ instance (Mattable n m) => Num (Mat n m) where
     (+) = op2' "+"
     (-) = op2' "-"
     (*) = op2' "*"
+    abs = op1pre "abs"
+    signum = op1pre "sign"
     negate = op1 "-"
     fromInteger x = copyM . uniform . show $ (fromInteger x :: Float)
-    --TODO ABS SIGNUM
 
 instance (Mattable n m) => Fractional (Mat n m) where
     (/) = op2' "/"
