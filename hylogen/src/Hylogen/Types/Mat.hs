@@ -146,6 +146,17 @@ instance (Mattable n m) => Floating (Mat n m) where
 mat22 :: (M11, M11, M11, M11) -> M22
 mat22 (a, b, c, d) = op4pre' "mat2" a b c d
 
+mat33 :: (M11, M11, M11
+         ,M11, M11, M11
+         ,M11, M11, M11) -> M33
+mat33 (a,b,c,d,e,f,g,h,i) = op9pre' "mat3" a b c d e f g h i
+
+mat44 :: (M11, M11, M11, M11
+         ,M11, M11, M11, M11
+         ,M11, M11, M11, M11
+         ,M11, M11, M11, M11) -> M44
+mat44 (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p) = op16pre' "mat4" a b c d e f g h i j k l m n o p
+--We should think about https://github.com/sleexyz/hylogen/issues/60
 --TODO other constructors
 
 --TEST FIXTURES
