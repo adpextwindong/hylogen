@@ -35,17 +35,13 @@ type family MulR a b where
 
 --The type error for this when partially applied sucks ASS
 --The tilde stuff was because it wasn't able to deduce enough from just this
---baz :: (OrMatVec a, OrMatVec b) => a -> b -> MulR a b
 mul :: (OrMatVec a, OrMatVec b, MulR a b ~ Expr c, b ~ Expr b0, a ~ Expr a0, ToGLSLType a0, ToGLSLType b0, ToGLSLType c) => a -> b -> MulR a b
 mul = op2 "*"
 
---"Illegal type synonym family application 'MulR a b' in instance"
---hmmm
---instance (OrMatVec a, OrMatVec b) => Num (MulR a b) where
-    --(*) = op2 "*"
-
 --Holy shit this works
+tbaz :: Expr (FloatVec 2)
 tbaz = mul ts22 tx
+tbaz2 :: Expr (FloatVec 2)
 tbaz2 = mul tx ts22
 
 -- | Floating matrix singleton type tag
@@ -105,9 +101,10 @@ instance Mattable 4 4 where
 instance (Mattable n m) => Num (Mat n m) where
     (+) = op2' "+"
     (-) = op2' "-"
-    (*) = op2' "*" -- TODO yeah idk about this one
+    (*) = op2' "*"
     negate = op1 "-"
     fromInteger x = copyM . uniform . show $ (fromInteger x :: Float)
+    --TODO ABS SIGNUM
 
 instance (Mattable n m) => Fractional (Mat n m) where
     (/) = op2' "/"
@@ -133,21 +130,10 @@ instance (Mattable n m) => Floating (Mat n m) where
     acosh x = log $ x + sqrt(x**2 - 1)
     atanh x = 0.5 * log ((1 + x)/(1 - x))
 
---Darn looks like we need to figure this out some more
---instance {-#OVERLAPPABLE#-} (a ~ Mattable n n, b ~ Veccable n) => Num (Vec n) where
-
---mul :: (ToGLSLType (FloatVec n), ToGLSLType (FloatMat n n)) => Mat n n -> Vec n  -> Vec n
---mul m v = op2 "*" m v
-
---instance (ToGLSLType (FloatVec n), ToGLSLType (FloatMat n n)) => Num (Mat n n) where
---    (*) = op2 "*"
-
-
-
-type (<) x y = (x + 1  <=? y) ~ 'False
-
 mat22 :: (M11, M11, M11, M11) -> M22
 mat22 (a, b, c, d) = op4pre' "mat2" a b c d
+
+--TODO other constructors
 
 --TEST FIXTURES
 ts22 :: M22
