@@ -27,9 +27,9 @@ data GLSLType = GLSLFloat
               | GLSLVec2
               | GLSLVec3
               | GLSLVec4
-              | GLSLMat2    --TODO
-              | GLSLMat3    --TODO
-              | GLSLMat4    --TODO
+              | GLSLMat2
+              | GLSLMat3
+              | GLSLMat4
               | GLSLBool
               | GLSLTexture
               deriving (Eq, Ord)
