@@ -327,8 +327,8 @@ instance (Show a) => Show (ExprMonoF a) where
     Op2Pre   -> mconcat [str, "(", strAt 0, ", ", strAt 1, ")"]
     Op3Pre   -> mconcat [str, "(", strAt 0, ", ", strAt 1, ", ", strAt 2, ")"]
     Op4Pre   -> mconcat [str, "(", strAt 0, ", ", strAt 1, ", ", strAt 2, ", ", strAt 3, ")"]
-    --TODO Op9Pre
-    --TODO Op16Pre
+    Op9Pre   -> mconcat [str, "(", strAt 0, ", ", strAt 1, ", ", strAt 2, ", ", strAt 3, ", ", strAt 4, ", ", strAt 5, ", ", strAt 6, ", ", strAt 7, ", ", strAt 8, ", ", strAt 9,")"]
+    Op16Pre  -> mconcat [str, "(", strAt 0, ", ", strAt 1, ", ", strAt 2, ", ", strAt 3, ", ", strAt 4, ", ", strAt 5, ", ", strAt 6, ", ", strAt 7, ", ", strAt 8, ", ", strAt 9, ", ", strAt 10, ", ", strAt 11, ", ", strAt 12, ", ", strAt 13, ", ", strAt 14, ", ", strAt 15, ", ", strAt 16, ")"]
     Select   -> mconcat ["( ", strAt 0, " ? ", strAt 1, " : ", strAt 2, ")"]
     Access   -> mconcat [strAt 0, ".", str]
     where
