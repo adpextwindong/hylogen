@@ -47,6 +47,10 @@ type family MulR a b where
 mul :: (OrMatVec a, OrMatVec b, MulR a b ~ Expr c, b ~ Expr b0, a ~ Expr a0, ToGLSLType a0, ToGLSLType b0, ToGLSLType c) => a -> b -> MulR a b
 mul = op2 "*"
 
+(*^*) :: (OrMatVec a, OrMatVec b, MulR a b ~ Expr c, b ~ Expr b0, a ~ Expr a0, ToGLSLType a0, ToGLSLType b0, ToGLSLType c) => a -> b -> MulR a b
+(*^*) = op2 "*"
+infix 6 *^*
+
 --Holy shit this works
 tbaz :: Expr (FloatVec 2)
 tbaz = mul ts22 tx
