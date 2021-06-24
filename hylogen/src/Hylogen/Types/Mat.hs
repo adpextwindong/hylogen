@@ -30,8 +30,17 @@ type OrMatVec t = (OrMatVec' t ~ 'True)
 
 type family MulR a b where
     MulR (Expr (FloatVec 2)) (Expr (FloatMat 2 2)) = Expr (FloatVec 2)
+    MulR (Expr (FloatVec 3)) (Expr (FloatMat 3 3)) = Expr (FloatVec 3)
+    MulR (Expr (FloatVec 4)) (Expr (FloatMat 4 4)) = Expr (FloatVec 4)
+
     MulR (Expr (FloatMat 2 2)) (Expr (FloatVec 2)) = Expr (FloatVec 2)
-    -- TODO fill out this table reasonably enough
+    MulR (Expr (FloatMat 3 3)) (Expr (FloatVec 3)) = Expr (FloatVec 3)
+    MulR (Expr (FloatMat 4 4)) (Expr (FloatVec 4)) = Expr (FloatVec 4)
+
+    MulR (Expr (FloatMat 2 2)) (Expr (FloatMat 2 2)) = Expr (FloatMat 2 2)
+    MulR (Expr (FloatMat 3 3)) (Expr (FloatMat 3 3)) = Expr (FloatMat 3 3)
+    MulR (Expr (FloatMat 4 4)) (Expr (FloatMat 4 4)) = Expr (FloatMat 4 4)
+    -- TODO nonsquare mats are supported in #version 120, we can think about that later
 
 --The type error for this when partially applied sucks ASS
 --The tilde stuff was because it wasn't able to deduce enough from just this
