@@ -64,9 +64,7 @@ data FloatMat (n :: Nat) (m :: Nat) where
 -- | A list of vecs is mattable if it can be the dimensions of a GLSL matrix
 class (ToGLSLType (FloatMat n m), KnownNat n, KnownNat m) => Mattable n m where
     --I really don't know if these are needed for now
-    --TODO ponder more about Veccable
     copyM :: M11 -> Mat n m
-    --copyV :: Vec1 -> Mat n m
     --toListM :: Mat n m -> [M11]
 
 -- | Expriemental Hylogen floating-point Matrix type
@@ -96,8 +94,8 @@ instance Mattable 1 1 where
     copyM = id
 
 instance Mattable 2 2 where
-    copyM v = op4pre' "mat2" v v v v
---TODO more instances
+    copyM v = op4pre' "mat2" v v
+                             v v
 
 instance Mattable 3 3 where
     --copyM = op9pre' "mat3"
