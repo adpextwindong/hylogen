@@ -36,10 +36,10 @@ fbm num_octaves pos = v
           vinit = 0.0
           a = 0.5
           shift = vec2(100.0, 100.0) + mouse :: Vec2
-          rot = mat22 ((cos 0.1) , (sin 0.5), (- sin 0.5), (cos 0.5)) :: M22
+          rot = mat22 ((cos 0.1) , (sin 0.5), (- sin 0.5), (cos 0.5)) :: M22 -- The matrix action
 
           fbmOctave (v,pos,a) = (v + (a * noise pos),
-                                ((rot *^* pos) * 2.0) + shift + mouse,
+                                ((rot *^* pos) * 2.0) + shift + mouse,       -- You were looking for.
                                 a * 0.5)
 
           xs = iterate fbmOctave (vinit, pos, a)
