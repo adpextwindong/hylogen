@@ -87,12 +87,12 @@ clamp mn mx x = op3pre'' "clamp" x mn mx
 -- | Linear interpolation between x and y by p, a Vec1 from 0 to 1
 --
 -- @
--- mix p x y = x ^* (1 - p) + y ^* p
--- -- mix 0 x y == x
--- -- mix 1 x y == y
+-- mix x y p = x ^* (1 - p) + y ^* p
+-- -- mix x y 0 == x
+-- -- mix x y 0 == y
 -- @
-mix :: (Veccable n) => Vec1 -> Vec n -> Vec n -> Vec n
-mix p x y = op3pre "mix" x y p
+mix :: (Veccable n) => Vec n -> Vec n -> Vec1 -> Vec n
+mix x y p = op3pre "mix" x y p
 
 true :: Booly
 true = uniform "true"
