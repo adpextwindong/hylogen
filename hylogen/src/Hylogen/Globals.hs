@@ -75,10 +75,10 @@ max_ = op2pre'' "max"
 -- | Clamps x between min and max
 --
 -- @
--- clamp min max x -- == clamped
+-- clamp x min max -- == clamped
 -- @
 clamp :: forall n. (Veccable n) => Vec n -> Vec n -> Vec n -> Vec n
-clamp mn mx x = op3pre'' "clamp" x mn mx
+clamp x mn mx = op3pre'' "clamp" x mn mx
 
 
 
