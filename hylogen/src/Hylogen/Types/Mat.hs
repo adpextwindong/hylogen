@@ -48,17 +48,11 @@ mul = op2 "*"
 (*^*) = op2 "*"
 infix 6 *^*
 
---Holy shit this works
-tbaz :: Expr (FloatVec 2)
-tbaz = mul ts22 tx
-tbaz2 :: Expr (FloatVec 2)
-tbaz2 = mul tx ts22
-
 -- | Floating matrix singleton type tag
 data FloatMat (n :: Nat) (m :: Nat) where
     FloatMat :: (Mattable n m) => FloatMat n m
 
--- | A list of vecs is mattable if it can be the dimensions of a GLSL matrix
+-- | A bunch of vecs is mattable if it can be the dimensions of a GLSL matrix
 class (ToGLSLType (FloatMat n m), KnownNat n, KnownNat m) => Mattable n m where
     --I really don't know if these are needed for now
     copyM :: M11 -> Mat n m
@@ -95,7 +89,6 @@ instance Mattable 2 2 where
                              v v
 
 instance Mattable 3 3 where
-    --copyM = op9pre' "mat3"
     copyM v = op9pre' "mat3" v v v
                              v v v
                              v v v
@@ -154,14 +147,3 @@ mat44 :: (M11, M11, M11, M11
 mat44 (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p) = op16pre' "mat4" a b c d e f g h i j k l m n o p
 --We should think about https://github.com/sleexyz/hylogen/issues/60
 --TODO other constructors
-
---TEST FIXTURES
-ts22 :: M22
-ts22 = mat22 (1, 1, 1, 1)
-tv :: Vec2
-tv = vec2 (1.0, 1.0)
-tx :: Vec2
-tx = mul ts22 tv
-
-tprog :: Vec4
-tprog = vec4 (tx, tx)
