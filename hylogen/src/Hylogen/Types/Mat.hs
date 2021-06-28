@@ -9,7 +9,7 @@
 
 --For OrMatVec MulR type-level machinery
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE PolyKinds #-}
+
 
 module Hylogen.Types.Mat where
 
